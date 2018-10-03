@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "dev": "nodemon ./server/index.js",
+    "start": "node ./server/index.js"
+  },
+  "name": "LunchMeBot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/alexeyvakarchuk/LunchMeBot.git",
+  "author": "Alexey <alexeyvakarchuk@yandex.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "telegraf": "^3.24.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}
