@@ -8,7 +8,8 @@ greeterScene.enter(async ctx => {
       keyboard: [
         [{ text: "Два блюда (66 грн)" }],
         [{ text: "Три блюда (99 грн)" }]
-      ]
+      ],
+      resize_keyboard: true
     }
   });
 });

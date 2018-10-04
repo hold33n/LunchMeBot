@@ -11,7 +11,8 @@ firstDishSelectScene.enter(async ctx => {
         [{ text: "Солянка (25 грн)" }],
         [{ text: "Окрошка (25 грн)" }],
         [{ text: "Назад" }]
-      ]
+      ],
+      resize_keyboard: true
     }
   });
 });

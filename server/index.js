@@ -3,8 +3,12 @@ const session = require("telegraf/session");
 const Stage = require("telegraf/stage");
 const { leave } = Stage;
 
+const Koa = require("koa");
+const app = new Koa();
+
 const path = require("path");
 const fs = require("fs");
+const config = require("./config");
 const axios = require("axios");
 const { sleep } = require("./utils");
 const { token } = require("./config");
@@ -18,7 +22,7 @@ const scenes = fs.readdirSync(path.join(__dirname, "scenes")).sort();
 scenes.forEach(sceneName => stage.register(require(`./scenes/${sceneName}`)));
 
 // *** Bot init ***
-const bot = new Telegraf(token);
+const bot = new Telegraf(token[process.env.NODE_ENV]);
 
 bot.use(session());
 bot.use(stage.middleware());
@@ -51,3 +55,5 @@ bot.on("text", ctx => {
 });
 
 bot.startPolling();
+
+app.listen(config.port);
