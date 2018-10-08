@@ -8,11 +8,11 @@ const app = new Koa();
 
 const path = require("path");
 const fs = require("fs");
-const config = require("./config");
 const axios = require("axios");
 const { sleep } = require("./utils");
 const { token } = require("./config");
-const { appId, appSecret } = require("./config").poster;
+const config = require("./config");
+const { appId, appSecret } = config.poster;
 
 // *** Scene registration ***
 const stage = new Stage();
