@@ -27,9 +27,9 @@ greeterScene.enter(ctx => {
   // const lunchPrice = dishesNum === 2 ? 66 : 99;
 
   const replyText = `Вы заказали ланч на ${num} блюда (${price} грн): 
-    ${firstDish.name}
-    ${secondDish.name}
-    ${thirdDish ? thirdDish.name : ""}`;
+    ${firstDish.product_name}
+    ${secondDish.product_name}
+    ${thirdDish ? thirdDish.product_name : ""}`;
 
   ctx.reply(replyText, {
     reply_markup: {

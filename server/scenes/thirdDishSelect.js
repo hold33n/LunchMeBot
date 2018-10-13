@@ -1,44 +1,35 @@
+const { getDishesByCategoryName } = require("../utils");
 const Scene = require("telegraf/scenes/base");
 
 const thirdDishSelectScene = new Scene("thirdDishSelect");
 
-const options = [
-  {
-    name: "Цезарь",
-    price: 25
-  },
-  {
-    name: "Оливье",
-    price: 15
-  },
-  {
-    name: "Греческий",
-    price: 30
-  }
-];
+thirdDishSelectScene.enter(async ctx => {
+  const products = await getDishesByCategoryName("Салаты");
 
-thirdDishSelectScene.enter(ctx => {
-  ctx.reply("Выбирай третье блюдо", {
+  ctx.reply("Выбирай салат", {
     reply_markup: {
       keyboard: [
-        ...options.map(({ name }) => [{ text: name }]),
+        ...products.map(({ product_name }) => [
+          {
+            text: product_name
+          }
+        ]),
         [{ text: "Назад 🔙" }]
       ],
       resize_keyboard: true
     }
   });
-});
 
-thirdDishSelectScene.hears("Назад 🔙", ctx =>
-  ctx.scene.enter("secondDishSelect")
-);
+  thirdDishSelectScene.hears("Назад 🔙", ctx =>
+    ctx.scene.enter("secondDishSelect")
+  );
 
-options.forEach(({ name, price }) => {
-  thirdDishSelectScene.hears(name, ctx => {
-    ctx.session.dishes.thirdDish = { name, price };
-    // ctx.scene.enter("secondDishSelect");
+  products.forEach(el => {
+    thirdDishSelectScene.hears(el.product_name, ctx => {
+      ctx.session.dishes.thirdDish = el;
 
-    ctx.scene.enter("summary");
+      ctx.scene.enter("summary");
+    });
   });
 });
 

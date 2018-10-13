@@ -10,7 +10,8 @@ const config = {
     account: "alex3",
     token: "8496625db021fdfa92e164bb0cb87acf"
   },
-  port: process.env.PORT || 3008
+  port: process.env.PORT || 3008,
+  baseURL: "https://alex3.joinposter.com/api"
 };
 
 module.exports = config;
