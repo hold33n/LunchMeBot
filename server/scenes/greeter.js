@@ -19,6 +19,7 @@ greeterScene.enter(async ctx => {
   ctx.session.dishes = {
     firstDish: null,
     secondDish: null,
+    thirdDish: null,
     extraDishes: []
   };
 

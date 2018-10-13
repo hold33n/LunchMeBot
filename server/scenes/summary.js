@@ -14,7 +14,7 @@ greeterScene.enter(ctx => {
   const { dishesNum, dishes } = ctx.session;
 
   const { num, price } = dishesNum;
-  const { firstDish, secondDish, thirdDish } = dishes;
+  const { firstDish, secondDish, thirdDish, extraDishes } = dishes;
 
   // let replyText = `Вы заказали: \n${firstDish.name} (${
   //   firstDish.price
@@ -26,10 +26,26 @@ greeterScene.enter(ctx => {
 
   // const lunchPrice = dishesNum === 2 ? 66 : 99;
 
-  const replyText = `Вы заказали ланч на ${num} блюда (${price} грн): 
-    ${firstDish.product_name}
+  let replyText = `Вы заказали ланч на ${num} блюда (${price} грн): 
+    <i>${firstDish.product_name}
     ${secondDish.product_name}
-    ${thirdDish ? thirdDish.product_name : ""}`;
+    ${thirdDish ? thirdDish.product_name : ""}</i>`;
+
+  if (extraDishes.length) {
+    replyText += extraDishes.reduce(
+      (acc, cur) =>
+        acc +
+        `\n\t\t\t\t<i>${cur.product_name} (${cur.price["1"] / 100} грн)</i>`,
+      "\nДополнительные блюда:"
+    );
+
+    const total = extraDishes.reduce(
+      (acc, cur) => acc + cur.price["1"] / 100,
+      price
+    );
+
+    replyText += `\n\n<b>Сумма: ${total} грн</b>`;
+  }
 
   ctx.reply(replyText, {
     reply_markup: {
@@ -39,8 +55,13 @@ greeterScene.enter(ctx => {
         [{ text: "Добавить что-то ещё" }]
       ],
       resize_keyboard: true
-    }
+    },
+    parse_mode: "HTML"
   });
+
+  greeterScene.hears("Добавить что-то ещё", ctx =>
+    ctx.scene.enter("fouthDishSelect")
+  );
 });
 
 // options.forEach(el => {
