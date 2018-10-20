@@ -20,7 +20,6 @@ fouthDishSelectScene.enter(async ctx => {
     ]);
 
     fouthDishSelectScene.hears("Удалить блюдо ❌", ctx => {
-      console.log(ctx.scene.state.dishIndex);
       ctx.session.dishes.extraDishes.splice(ctx.scene.state.dishIndex, 1);
       ctx.scene.enter("summary");
     });

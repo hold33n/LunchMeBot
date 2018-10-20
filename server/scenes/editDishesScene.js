@@ -68,12 +68,12 @@ editDishesScene.enter(ctx => {
 });
 
 // options.forEach(el => {
-//   greeterScene.hears(el, ctx => {
+//   selectTimeScene.hears(el, ctx => {
 //     ctx.session.dishesNum = el;
 //     ctx.scene.enter("firstDishSelect");
 //   });
 // });
 
-// greeterScene.leave(ctx => ctx.reply("Bye"));
+// selectTimeScene.leave(ctx => ctx.reply("Bye"));
 
 module.exports = editDishesScene;

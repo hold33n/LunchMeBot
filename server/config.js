@@ -11,7 +11,11 @@ const config = {
     token: "8496625db021fdfa92e164bb0cb87acf"
   },
   port: process.env.PORT || 3008,
-  baseURL: "https://alex3.joinposter.com/api"
+  baseURL: "https://alex3.joinposter.com/api",
+  paymentTokens: {
+    test: "632593626:TEST:i56982357197",
+    live: "635983722:LIVE:i8422196499"
+  }
 };
 
 module.exports = config;

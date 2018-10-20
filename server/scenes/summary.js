@@ -1,9 +1,9 @@
 const Scene = require("telegraf/scenes/base");
 
-const greeterScene = new Scene("summary");
+const summaryScene = new Scene("summary");
 
-greeterScene.enter(ctx => {
-  const { dishesNum, dishes } = ctx.session;
+summaryScene.enter(ctx => {
+  const { dishesNum, dishes, lunchTime } = ctx.session;
 
   const { num, price } = dishesNum;
   const { firstDish, secondDish, thirdDish, extraDishes } = dishes;
@@ -29,6 +29,8 @@ greeterScene.enter(ctx => {
     replyText += `\n\n<b>Сумма: ${total} грн</b>`;
   }
 
+  replyText += `\n<b>Время ланча: ${lunchTime}</b>`;
+
   ctx.reply(replyText, {
     reply_markup: {
       keyboard: [
@@ -41,22 +43,24 @@ greeterScene.enter(ctx => {
     parse_mode: "HTML"
   });
 
-  greeterScene.hears("Редактировать заказ", ctx =>
+  summaryScene.hears("Перейти к оплате ✅", ctx => ctx.scene.enter("payment"));
+
+  summaryScene.hears("Редактировать заказ", ctx =>
     ctx.scene.enter("editDishes")
   );
 
-  greeterScene.hears("Добавить что-то ещё", ctx =>
+  summaryScene.hears("Добавить что-то ещё", ctx =>
     ctx.scene.enter("fouthDishSelect")
   );
 });
 
 // options.forEach(el => {
-//   greeterScene.hears(el, ctx => {
+//   selectTimeScene.hears(el, ctx => {
 //     ctx.session.dishesNum = el;
 //     ctx.scene.enter("firstDishSelect");
 //   });
 // });
 
-// greeterScene.leave(ctx => ctx.reply("Bye"));
+// selectTimeScene.leave(ctx => ctx.reply("Bye"));
 
-module.exports = greeterScene;
+module.exports = summaryScene;

@@ -29,7 +29,7 @@ firstDishSelectScene.enter(async ctx => {
     ctx =>
       ctx.scene.state.editDish
         ? ctx.scene.enter("editDishes")
-        : ctx.scene.enter("greeter")
+        : ctx.scene.enter("selectTime")
   );
 
   products.forEach(el => {
