@@ -6,7 +6,11 @@ const thirdDishSelectScene = new Scene("thirdDishSelect");
 thirdDishSelectScene.enter(async ctx => {
   const products = await getDishesByCategoryName("Салаты");
 
-  ctx.reply("Выбирай салат", {
+  const replyMessage = ctx.scene.state.editDish
+    ? "Редактировать салат"
+    : "Выбирай салат";
+
+  ctx.reply(replyMessage, {
     reply_markup: {
       keyboard: [
         ...products.map(({ product_name }) => [
@@ -20,8 +24,12 @@ thirdDishSelectScene.enter(async ctx => {
     }
   });
 
-  thirdDishSelectScene.hears("Назад 🔙", ctx =>
-    ctx.scene.enter("secondDishSelect")
+  thirdDishSelectScene.hears(
+    "Назад 🔙",
+    ctx =>
+      ctx.scene.state.editDish
+        ? ctx.scene.enter("editDishes")
+        : ctx.scene.enter("secondDishSelect")
   );
 
   products.forEach(el => {

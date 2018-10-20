@@ -2,29 +2,11 @@ const Scene = require("telegraf/scenes/base");
 
 const greeterScene = new Scene("summary");
 
-// const options = ["Два блюда (66 грн)", "Три блюда (99 грн)"];
-
 greeterScene.enter(ctx => {
-  //  ctx.reply("Сколько блюд ты будешь кушать?", {
-  //   reply_markup: {
-  //     keyboard: options.map(el => [{ text: el }]),
-  //     resize_keyboard: true
-  //   }
-  // });
   const { dishesNum, dishes } = ctx.session;
 
   const { num, price } = dishesNum;
   const { firstDish, secondDish, thirdDish, extraDishes } = dishes;
-
-  // let replyText = `Вы заказали: \n${firstDish.name} (${
-  //   firstDish.price
-  // } грн) \n${secondDish.name} (${secondDish.price} грн)`;
-
-  // if (thirdDish) {
-  //   replyText += `\n${thirdDish.name} (${thirdDish.price} грн)`;
-  // }
-
-  // const lunchPrice = dishesNum === 2 ? 66 : 99;
 
   let replyText = `Вы заказали ланч на ${num} блюда (${price} грн): 
     <i>${firstDish.product_name}
@@ -36,7 +18,7 @@ greeterScene.enter(ctx => {
       (acc, cur) =>
         acc +
         `\n\t\t\t\t<i>${cur.product_name} (${cur.price["1"] / 100} грн)</i>`,
-      "\nДополнительные блюда:"
+      "\n\nДополнительные блюда:"
     );
 
     const total = extraDishes.reduce(
@@ -58,6 +40,10 @@ greeterScene.enter(ctx => {
     },
     parse_mode: "HTML"
   });
+
+  greeterScene.hears("Редактировать заказ", ctx =>
+    ctx.scene.enter("editDishes")
+  );
 
   greeterScene.hears("Добавить что-то ещё", ctx =>
     ctx.scene.enter("fouthDishSelect")

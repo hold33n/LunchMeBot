@@ -6,7 +6,11 @@ const firstDishSelectScene = new Scene("firstDishSelect");
 firstDishSelectScene.enter(async ctx => {
   const products = await getDishesByCategoryName("Первые блюда");
 
-  ctx.reply("Выбирай первое блюдо", {
+  const replyMessage = ctx.scene.state.editDish
+    ? "Редактировать первое блюдо"
+    : "Выбирай первое блюдо";
+
+  ctx.reply(replyMessage, {
     reply_markup: {
       keyboard: [
         ...products.map(({ product_name }) => [
@@ -20,12 +24,23 @@ firstDishSelectScene.enter(async ctx => {
     }
   });
 
-  firstDishSelectScene.hears("Назад 🔙", ctx => ctx.scene.enter("greeter"));
+  firstDishSelectScene.hears(
+    "Назад 🔙",
+    ctx =>
+      ctx.scene.state.editDish
+        ? ctx.scene.enter("editDishes")
+        : ctx.scene.enter("greeter")
+  );
 
   products.forEach(el => {
     firstDishSelectScene.hears(el.product_name, ctx => {
       ctx.session.dishes.firstDish = el;
-      ctx.scene.enter("secondDishSelect");
+
+      if (ctx.scene.state.editDish) {
+        ctx.scene.enter("summary");
+      } else {
+        ctx.scene.enter("secondDishSelect");
+      }
     });
   });
 });
