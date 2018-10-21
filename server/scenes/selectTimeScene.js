@@ -24,14 +24,10 @@ selectTimeScene.on("message", async ctx => {
     const minute = +ctx.update.message.text.slice(3);
 
     if (
-      moment
-        .max(
-          moment(),
-          moment()
-            .hour(hour)
-            .minute(minute)
-        )
-        .isSame(moment()) ||
+      moment()
+        .hour(hour)
+        .minute(minute)
+        .isBefore(moment()) ||
       hour > 23 ||
       minute > 59
     ) {

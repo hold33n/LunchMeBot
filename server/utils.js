@@ -36,19 +36,16 @@ const getDishesByCategoryName = async categoryName => {
   return productsRes.data.response;
 };
 
-const getFullLunchTime = lunchTime =>
-  moment()
-    .hour(parseInt(lunchTime))
-    .minute(+lunchTime.slice(3))
-    .format("YYYY-MM-DD HH:mm:00");
-
 const getTablesForReservation = async lunchTime => {
   const tablesForReservationRef = {
     method: "get",
     baseURL,
     url: "/incomingOrders.getTablesForReservation",
     params: {
-      date_reservation: getFullLunchTime(lunchTime),
+      date_reservation: moment()
+        .hour(parseInt(lunchTime))
+        .minute(+lunchTime.slice(3))
+        .format("DD-MM-YYYY HH:mm"),
       token,
       spot_id: "1",
       duration: 1800,
@@ -70,7 +67,10 @@ const createReservation = async (lunchTime, table_id) => {
       token
     },
     data: {
-      date_reservation: getFullLunchTime(lunchTime),
+      date_reservation: moment()
+        .hour(parseInt(lunchTime))
+        .minute(+lunchTime.slice(3))
+        .format("YYYY-MM-DD HH:mm:00"),
       spot_id: "1",
       table_id,
       duration: 1800,

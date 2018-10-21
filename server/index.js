@@ -55,14 +55,10 @@ bot.on("pre_checkout_query", async ctx => {
     const minute = +lunchTime.slice(3);
 
     if (
-      moment
-        .max(
-          moment(),
-          moment()
-            .hour(hour)
-            .minute(minute)
-        )
-        .isSame(moment())
+      moment()
+        .hour(hour)
+        .minute(minute)
+        .isBefore(moment())
     ) {
       answerPreCheckoutQuery(false, "Вы выбрали неправильное время!");
     } else {
