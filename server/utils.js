@@ -84,16 +84,54 @@ const createReservation = async (lunchTime, table_id) => {
   return res.data.response;
 };
 
-const createOrder = async lunchTime => {
+const createIncomingOrder = async (lunchTime, table_id, products, sum) => {
+  const createReservationRef = {
+    method: "post",
+    baseURL,
+    url: "/incomingOrders.createIncomingOrder",
+    params: {
+      token
+    },
+    data: {
+      spot_id: "1",
+      phone: "+380676467075",
+      comment: `Стол: ${table_id}\nВремя:${lunchTime}`,
+      products: products.map(el => ({
+        product_id: el,
+        count: 1
+      })),
+      payment: {
+        type: 1,
+        currency: "UAH",
+        sum
+      }
+    }
+  };
+
+  res = await axios(createReservationRef);
+
+  console.log(res);
+
+  return res.data.response;
+};
+
+const createOrder = async (lunchTime, products, sum) => {
   try {
     const freeTables = await getTablesForReservation(lunchTime);
 
-    const createReservationRes = await createReservation(
+    const { table_id } = await createReservation(
       lunchTime,
       freeTables[0].table_id
     );
 
-    return createReservationRes;
+    const createIncomingOrderRes = await createIncomingOrder(
+      lunchTime,
+      table_id,
+      products,
+      sum
+    );
+
+    return { table_id };
   } catch (e) {
     console.log(e);
   }

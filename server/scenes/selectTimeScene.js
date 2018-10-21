@@ -19,7 +19,7 @@ selectTimeScene.enter(async ctx => {
 selectTimeScene.on("message", async ctx => {
   const re = /^(\d){2}:(\d){2}$/;
 
-  if (re.test(ctx.update.message.text)) {
+  if (ctx.update.message.text && re.test(ctx.update.message.text)) {
     const hour = parseInt(ctx.update.message.text);
     const minute = +ctx.update.message.text.slice(3);
 

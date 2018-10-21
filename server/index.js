@@ -48,20 +48,26 @@ bot.start(async ctx => {
   await ctx.scene.enter("selectTime");
 });
 
-// For all non-supportet phases
-bot.on("text", ctx => {
-  ctx.reply(
-    `Ничего не понял. Я разбираюсь только в ланчах, остальное для меня темный лес 🌲`
-  );
-});
-
 // Payment Responses
 bot.on("pre_checkout_query", async ctx => {
-  const lunchTime = ctx.update.pre_checkout_query.invoice_payload;
+  const { lunchTime } = JSON.parse(
+    ctx.update.pre_checkout_query.invoice_payload
+  );
 
   if (lunchTime) {
     const hour = parseInt(lunchTime);
     const minute = +lunchTime.slice(3);
+
+    console.log(
+      moment()
+        .hour(hour)
+        .minute(minute),
+      moment(),
+      moment()
+        .hour(hour)
+        .minute(minute)
+        .isBefore(moment())
+    );
 
     if (
       moment()
@@ -69,7 +75,7 @@ bot.on("pre_checkout_query", async ctx => {
         .minute(minute)
         .isBefore(moment())
     ) {
-      answerPreCheckoutQuery(false, "Вы выбрали неправильное время!");
+      ctx.answerPreCheckoutQuery(false, "Вы выбрали неправильное время!");
     } else {
       // Get free tables
       const res = await getTablesForReservation(lunchTime);
@@ -87,20 +93,46 @@ bot.on("pre_checkout_query", async ctx => {
 });
 
 bot.on("successful_payment", async ctx => {
-  const lunchTime = ctx.update.message.successful_payment.invoice_payload;
+  const { lunchTime, products, sum } = JSON.parse(
+    ctx.update.message.successful_payment.invoice_payload
+  );
+
+  // console.log(ctx);
 
   if (lunchTime) {
-    const res = await createOrder(lunchTime);
+    const res = await createOrder(lunchTime, products, sum);
 
-    ctx.reply(
+    await ctx.reply(
       `Поздравляем, оплата прошла успешно!\nВремя ланча: <b>${lunchTime}</b>\nНомер столика: <b>${
         res.table_id
       }</b>`,
       {
+        reply_markup: {
+          keyboard: [[{ text: "Сделать новый заказ" }]],
+          resize_keyboard: true
+        },
         parse_mode: "HTML"
       }
     );
+
+    ctx.session.dishes = {
+      lunchTime: null,
+      dishesNum: null,
+      firstDish: null,
+      secondDish: null,
+      thirdDish: null,
+      extraDishes: []
+    };
   }
+});
+
+bot.hears("Сделать новый заказ", ctx => ctx.scene.enter("selectTime"));
+
+// For all non-supportet phases
+bot.on("text", ctx => {
+  ctx.reply(
+    `Ничего не понял. Я разбираюсь только в ланчах, остальное для меня темный лес 🌲`
+  );
 });
 
 bot.startPolling();
