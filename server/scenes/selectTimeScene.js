@@ -23,6 +23,17 @@ selectTimeScene.on("message", async ctx => {
     const hour = parseInt(ctx.update.message.text);
     const minute = +ctx.update.message.text.slice(3);
 
+    console.log(
+      moment()
+        .hour(hour)
+        .minute(minute),
+      moment(),
+      moment()
+        .hour(hour)
+        .minute(minute)
+        .isBefore(moment())
+    );
+
     if (
       moment()
         .hour(hour)
