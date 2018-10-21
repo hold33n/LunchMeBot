@@ -29,6 +29,15 @@ bot.use(session());
 bot.use(stage.middleware());
 
 bot.start(async ctx => {
+  ctx.session.dishes = {
+    lunchTime: null,
+    dishesNum: null,
+    firstDish: null,
+    secondDish: null,
+    thirdDish: null,
+    extraDishes: []
+  };
+
   await ctx.reply(`Привет, ${ctx.chat.first_name}!`);
   await sleep(2000);
 

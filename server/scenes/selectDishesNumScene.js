@@ -16,13 +16,6 @@ const options = [
 ];
 
 selectDishesNumScene.enter(async ctx => {
-  ctx.session.dishes = {
-    firstDish: null,
-    secondDish: null,
-    thirdDish: null,
-    extraDishes: []
-  };
-
   await ctx.reply(
     "Сколько блюд сегодня желаешь ты, о искушенный раб желудка?😅",
     {
